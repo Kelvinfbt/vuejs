@@ -1,0 +1,49 @@
+<section>
+  <div>
+    <h2>Calculateur de Contrat</h2>
+    <label>Date de début du contrat:</label>
+    <input type="date" v-model="startDate" @change="calculateDuration" />
+    <br />
+    <label>Date de fin du contrat:</label>
+    <input type="date" v-model="endDate" @change="calculateDuration" />
+    <br />
+    <label>Nombre d'heures hebdomadaires:</label>
+    <input type="number" v-model="weeklyHours" @input="calculateETP" />
+    <br />
+
+    <p>Durée du contrat en jours: {{ contractDurationDays }}</p>
+    <p>Durée du contrat en heures: {{ contractDurationHours }}</p>
+    <p>ETP (équivalent temps plein): {{ etp }}</p>
+  </div>
+</section>
+
+<script>
+export default {
+  data() {
+    return {
+      startDate: "",
+      endDate: "",
+      weeklyHours: 0,
+      contractDurationDays: 0,
+      contractDurationHours: 0,
+      etp: 0,
+    };
+  },
+  methods: {
+    calculateDuration() {
+      if (this.startDate && this.endDate) {
+        const start = new Date(this.startDate);
+        const end = new Date(this.endDate);
+        const durationInMilliseconds = end - start;
+        this.contractDurationDays = Math.ceil(durationInMilliseconds / (1000 * 60 * 60 * 24));
+        this.contractDurationHours = Math.ceil(durationInMilliseconds / (1000 * 60 * 60));
+      }
+    },
+    calculateETP() {
+      if (this.weeklyHours) {
+        this.etp = (this.weeklyHours / 35).toFixed(2);
+      }
+    },
+  },
+};
+</script>
